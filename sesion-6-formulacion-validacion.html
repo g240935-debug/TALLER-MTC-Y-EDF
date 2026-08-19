@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 6 · Puesta en común, formulación y validación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F0EA; --card:#FFFFFF; --ink:#23293B; --ink-soft:#6B7280;
+    --accent:#4A5FBF; --accent-soft:rgba(74,95,191,0.08); --accent-line:rgba(74,95,191,0.28);
+    --warn:#C0392B; --warn-soft:rgba(192,57,43,0.08);
+    --font:'Manrope', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{min-height:100vh; display:flex; justify-content:center; padding:36px 16px 48px; background:var(--bg); font-family:var(--font); color:var(--ink);}
+  .shell{width:100%; max-width:560px; background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.10); padding:34px 30px 26px;}
+
+  header.brand{margin-bottom:6px;}
+  header.brand .icon{width:52px; height:52px; margin-bottom:10px;}
+  header.brand .eyebrow{font-size:11px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--accent);}
+  header.brand .title{font-size:21px; font-weight:800; color:var(--ink); line-height:1.25; margin-top:4px;}
+  header.brand .sub{font-size:12px; color:var(--ink-soft); margin-top:6px; padding-bottom:16px; border-bottom:1px solid rgba(35,41,59,0.08);}
+
+  p, li{font-size:13.5px; line-height:1.65; font-weight:500;}
+  .intro-line{font-size:13.5px; line-height:1.65; color:var(--ink-soft); margin:14px 0; font-weight:500;}
+
+  .step{margin:16px 0; padding:16px 17px; background:var(--card); border:1px solid rgba(35,41,59,0.08); border-radius:12px; box-shadow:0 2px 8px rgba(35,41,59,0.04);}
+  .step-head{display:flex; align-items:center; gap:9px; margin-bottom:9px; font-weight:800; font-size:13.5px;}
+  .step-num{flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:11.5px;}
+
+  .cuaderno-box{background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:6px; padding:12px 14px; margin:10px 0;}
+  .cuaderno-box .cuaderno-label{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); margin-bottom:5px;}
+  .cuaderno-box p, .cuaderno-box li{font-size:13.5px; line-height:1.6; margin:3px 0;}
+
+  .config-bar{background:rgba(35,41,59,0.035); border:1px solid rgba(35,41,59,0.08); border-radius:10px; padding:12px 14px; margin:14px 0;}
+  .config-bar .config-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:7px;}
+
+  .link-card{background:#fff; border:1px solid rgba(35,41,59,0.08); border-left:3px solid var(--accent); border-radius:8px; padding:10px 13px; margin:8px 0;}
+  .link-card .link-bank{font-weight:800; font-size:12.5px;}
+  .link-card .link-type{font-size:11px; color:var(--ink-soft); margin:1px 0 5px; font-weight:500;}
+  .link-card a{color:var(--accent); font-size:11.5px; font-weight:600; word-break:break-all; text-decoration:none;}
+  .link-card a:hover{text-decoration:underline;}
+  .link-card .link-note{font-size:11px; color:var(--warn); margin-top:6px; font-weight:600;}
+
+  .table-wrap{overflow-x:auto;}
+  .template-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;}
+  .template-table th, .template-table td{border-bottom:1px solid rgba(35,41,59,0.10); padding:8px 6px; text-align:center; min-width:52px;}
+  .template-table th{font-weight:800; font-size:9.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft);}
+
+  .warn-strip{background:var(--warn-soft); color:var(--warn); font-weight:700; font-size:12px; text-align:center; padding:10px 12px; border-radius:8px; margin:12px 0; border:1px solid rgba(192,57,43,0.22);}
+
+  label.field{display:flex; flex-direction:column; gap:5px; font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:9px;}
+  input, select{font-family:var(--font); font-size:14px; font-weight:600; padding:9px 10px; border:1px solid rgba(35,41,59,0.14); border-radius:8px; background:#fff; color:var(--ink); width:100%;}
+  input:focus{outline:2px solid var(--accent); border-color:var(--accent);}
+
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 10px;}
+  @media (max-width:420px){ .calc-grid{grid-template-columns:1fr;} }
+  .calc-result{background:var(--accent-soft); border-radius:10px; padding:14px 15px; margin-top:10px;}
+  .calc-result .res-row{display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:600; padding:6px 0; border-bottom:1px solid rgba(35,41,59,0.08);}
+  .calc-result .res-row:last-child{border-bottom:none; font-weight:800; font-size:15px; color:var(--accent);}
+  .calc-warning{color:var(--warn); font-size:12.5px; font-weight:700; margin-top:9px; display:none;}
+
+  .foot{font-size:10.5px; font-weight:700; letter-spacing:.08em; color:var(--ink-soft); margin-top:20px; padding-top:14px; border-top:1px solid rgba(35,41,59,0.08);}
+
+  @media (max-width:400px){ .shell{padding:26px 18px 20px;} }
+</style>
+</head>
+<body>
+<div id="gateOverlay" style="position:fixed; inset:0; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;"><div style="background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.15); padding:32px 28px; max-width:320px; width:100%; text-align:center; font-family:var(--font);"><div style="font-size:32px; margin-bottom:10px;">🔒</div><div style="font-weight:800; font-size:15px; margin-bottom:6px; color:var(--ink);">Acceso solo en clase</div><div style="font-size:12px; color:var(--ink-soft); margin-bottom:16px;">Pídele la clave a tu profesor.</div><input type="password" id="gatePassInput" placeholder="Clave" style="text-align:center; margin-bottom:10px;"><button id="gateSubmitBtn" style="width:100%; padding:10px; border:none; border-radius:8px; background:var(--accent); color:#fff; font-weight:800; font-size:13px; cursor:pointer; font-family:var(--font);">Entrar</button><div id="gateError" style="color:var(--warn); font-size:11px; margin-top:8px; display:none;">Clave incorrecta, intenta de nuevo.</div></div></div>
+<script>
+var SESSION_PASSWORD = "tarjeta6"; // <-- cambia esta clave cuando quieras
+(function(){
+  function tryUnlock(){
+    var val = document.getElementById("gatePassInput").value.trim().toLowerCase();
+    if (val === SESSION_PASSWORD.toLowerCase()){
+      document.getElementById("gateOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      document.getElementById("gateError").style.display = "block";
+      document.getElementById("gatePassInput").value = "";
+      document.getElementById("gatePassInput").focus();
+    }
+  }
+  document.getElementById("gateSubmitBtn").addEventListener("click", tryUnlock);
+  document.getElementById("gatePassInput").addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+  document.getElementById("gatePassInput").focus();
+})();
+</script>
+<div class="shell" id="mainContent" style="display:none;">
+<header class="brand">
+<svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke="#4A5FBF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="10" y1="50" x2="10" y2="30"/><line x1="22" y1="50" x2="22" y2="18"/><line x1="34" y1="50" x2="34" y2="38"/><line x1="6" y1="50" x2="40" y2="50"/><circle cx="47" cy="23" r="9"/><line x1="54" y1="30" x2="59" y2="35"/></svg>
+<div class="eyebrow">Sesión 6 de 7</div>
+<div class="title">Puesta en común, formulación y validación</div>
+<div class="sub">Colegio de Santander · Grado 8-2</div>
+</header>
+<div class="step"><div class="step-head"><span class="step-num">1</span>Puesta en común visual</div><p>Mientras cada pareja comparte la tasa E.A. que encontró en la Sesión 5, agréguenla aquí (es el mismo tipo de diagrama que usaron en la Sesión 1, ahora con datos reales de bancos):</p><div class="config-bar"><div class="config-label">Agregar la tasa E.A. de una pareja</div><div style="display:flex; gap:8px; align-items:flex-end;"><label class="field" style="flex:1; margin-bottom:0;">Tasa E.A. (%)<input type="number" id="valorInput6" step="0.1" min="0" placeholder="ej. 25"></label><button id="btnAgregar6" style="flex-shrink:0; padding:9px 14px; border-radius:8px; border:none; background:var(--accent); color:#fff; font-weight:800; font-size:12.5px; cursor:pointer;">Agregar</button></div></div><p style="font-size:10.5px; color:var(--ink-soft); font-weight:700; margin:10px 0 2px;">CADA PUNTO = LA TASA DE UNA PAREJA (tócalo para ver cuánto vale)</p><div id="dotplot6"></div><p id="emptyMsg6" style="font-size:11.5px; color:var(--ink-soft); text-align:center; margin-top:6px;">Aún no hay tasas agregadas.</p><div id="chips6" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;"></div><p id="countMsg6" style="font-size:11px; color:var(--ink-soft); margin-top:8px; font-weight:700;"></p></div>
+<div class="step"><div class="step-head"><span class="step-num">2</span>Formulación</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>Con los datos que reunió todo el curso (arriba), propongan y calculen <strong>su propio método</strong> para resumir en un solo número “la tasa de interés típica” que cobran las tarjetas de crédito en Colombia. Expliquen por qué eligieron ese método.</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">3</span>Investiga</div><p>Busquen: ¿cuál es la tasa de usura vigente este mes en Colombia? (pista: la certifica la Superintendencia Financiera cada mes)</p><div class="link-card"><div class="link-bank">Banco de la República</div><div class="link-type">Glosario (punto de partida para buscar)</div><a href="https://www.banrep.gov.co/es/glosario/tasa-usura" target="_blank" rel="noopener">www.banrep.gov.co/es/glosario/tasa-usura</a></div></div>
+<div class="step"><div class="step-head"><span class="step-num">4</span>Validación</div><p>Agreguen la tasa de usura que encontraron al mismo diagrama de arriba (va a aparecer marcada en rojo, aparte de los datos del curso):</p><div class="config-bar"><div class="config-label">Agregar la tasa de usura investigada</div><div style="display:flex; gap:8px; align-items:flex-end;"><label class="field" style="flex:1; margin-bottom:0;">Tasa de usura (%)<input type="number" id="usuraInput6" step="0.1" min="0" placeholder="ej. 29.66"></label><button id="btnAgregarUsura6" style="flex-shrink:0; padding:9px 14px; border-radius:8px; border:none; background:var(--warn); color:#fff; font-weight:800; font-size:12.5px; cursor:pointer;">Agregar</button></div></div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>Mirando el diagrama con la tasa de usura marcada: ¿alguna de las tasas que encontró el curso se acerca a ese límite? Si agregan este dato a su conjunto, ¿cambia mucho el resultado del método que propusieron en el Paso 2? ¿Por qué sí o por qué no?</p></div></div>
+<div class="foot">SESIÓN 6 DE 7</div>
+</div>
+<script>
+var valores6 = [];
+var usuraValor6 = null;
+var selected6 = {};
+function fmt6(n){ return n.toFixed(1) + '%'; }
+function renderAll6(){
+  selected6 = {};
+  renderDotplot6();
+  renderChips6();
+  document.getElementById('countMsg6').textContent = valores6.length ? ('n = ' + valores6.length + ' tasa' + (valores6.length===1?'':'s') + ' del curso' + (usuraValor6 !== null ? ' + 1 tasa de usura' : '')) : '';
+}
+function toggleLabel6(key){
+  selected6[key] = !selected6[key];
+  renderDotplot6();
+}
+function renderDotplot6(){
+  var container = document.getElementById('dotplot6');
+  var empty = document.getElementById('emptyMsg6');
+  var all = valores6.slice();
+  if (usuraValor6 !== null) all.push(usuraValor6);
+  if (all.length === 0){ container.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  var W = 320, H = 92, m = 16, axisY = H - 22;
+  var maxV = Math.max.apply(null, all) * 1.12;
+  function xPos(v){ return m + (v/maxV) * (W - 2*m); }
+  var rowsLastX = [];
+  var dots = '', labels = '';
+  function placeDot(v, key, baseColor){
+    var x = xPos(v);
+    var row = -1;
+    for (var r = 0; r < rowsLastX.length; r++){ if ((x - rowsLastX[r]) >= 11){ row = r; break; } }
+    if (row === -1){ row = rowsLastX.length; rowsLastX.push(x); } else { rowsLastX[row] = x; }
+    var y = axisY - 8 - Math.min(row,3)*11;
+    var isSel = !!selected6[key];
+    var rad = isSel ? 9 : 7;
+    var fill = isSel ? '#8B2A20' : baseColor;
+    dots += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + rad + '" fill="' + fill + '" class="dotpoint" data-key="' + key + '" style="cursor:pointer;"/>';
+    if (isSel){
+      labels += '<text x="' + x.toFixed(1) + '" y="' + (y-13).toFixed(1) + '" font-size="9.5" font-weight="800" fill="#8B2A20" text-anchor="middle">' + fmt6(v) + '</text>';
+    }
+  }
+  valores6.forEach(function(v, idx){ placeDot(v, 'n' + idx, '#4A5FBF'); });
+  if (usuraValor6 !== null) placeDot(usuraValor6, 'usura', '#C0392B');
+  var ticks = [0, maxV/2, maxV];
+  var tickSvg = ticks.map(function(t, idx){
+    var x = xPos(t);
+    var anchor = idx===0 ? 'start' : (idx===2 ? 'end' : 'middle');
+    return '<line x1="' + x.toFixed(1) + '" y1="' + axisY + '" x2="' + x.toFixed(1) + '" y2="' + (axisY+4) + '" stroke="rgba(35,41,59,0.3)" stroke-width="1"/>' +
+      '<text x="' + x.toFixed(1) + '" y="' + (axisY+15) + '" font-size="8.5" fill="#6B7280" text-anchor="' + anchor + '">' + fmt6(t) + '</text>';
+  }).join('');
+  var axis = '<line x1="' + m + '" y1="' + axisY + '" x2="' + (W-m) + '" y2="' + axisY + '" stroke="rgba(35,41,59,0.25)" stroke-width="1"/>';
+  container.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;touch-action:manipulation;">' + axis + tickSvg + dots + labels + '</svg>';
+}
+function renderChips6(){
+  var container = document.getElementById('chips6');
+  var normal = valores6.map(function(v, idx){
+    return '<span style="display:inline-flex; align-items:center; gap:4px; background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:11px; padding:4px 9px; border-radius:12px;">' + fmt6(v) + ' <button data-idx="' + idx + '" class="chipDel6" style="border:none; background:none; color:var(--accent); cursor:pointer; font-weight:800; font-size:12px; padding:0; line-height:1;">×</button></span>';
+  }).join('');
+  var usuraChip = usuraValor6 !== null ? '<span style="display:inline-flex; align-items:center; gap:4px; background:var(--warn-soft); color:var(--warn); font-weight:800; font-size:11px; padding:4px 9px; border-radius:12px;">⚠️ usura ' + fmt6(usuraValor6) + '</span>' : '';
+  container.innerHTML = normal + usuraChip;
+}
+document.getElementById('btnAgregar6').addEventListener('click', function(){
+  var input = document.getElementById('valorInput6');
+  var v = parseFloat(input.value);
+  if (isNaN(v) || v <= 0) return;
+  valores6.push(v);
+  input.value = '';
+  renderAll6();
+});
+document.getElementById('valorInput6').addEventListener('keydown', function(e){
+  if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('btnAgregar6').click(); }
+});
+document.getElementById('chips6').addEventListener('click', function(ev){
+  var btn = ev.target.closest('.chipDel6');
+  if (!btn) return;
+  valores6.splice(parseInt(btn.dataset.idx, 10), 1);
+  renderAll6();
+});
+document.getElementById('btnAgregarUsura6').addEventListener('click', function(){
+  var input = document.getElementById('usuraInput6');
+  var v = parseFloat(input.value);
+  if (isNaN(v) || v <= 0) return;
+  usuraValor6 = v;
+  renderAll6();
+});
+document.getElementById('dotplot6').addEventListener('click', function(e){
+  var target = e.target.closest('.dotpoint');
+  if (!target) return;
+  toggleLabel6(target.getAttribute('data-key'));
+});
+renderAll6();
+</script>
+</body>
+</html>

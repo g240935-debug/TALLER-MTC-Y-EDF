@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 1 · El cupo del curso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F0EA; --card:#FFFFFF; --ink:#23293B; --ink-soft:#6B7280;
+    --accent:#4A5FBF; --accent-soft:rgba(74,95,191,0.08); --accent-line:rgba(74,95,191,0.28);
+    --warn:#C0392B; --warn-soft:rgba(192,57,43,0.08);
+    --font:'Manrope', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{min-height:100vh; display:flex; justify-content:center; padding:36px 16px 48px; background:var(--bg); font-family:var(--font); color:var(--ink);}
+  .shell{width:100%; max-width:560px; background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.10); padding:34px 30px 26px;}
+
+  header.brand{margin-bottom:6px;}
+  header.brand .icon{width:52px; height:52px; margin-bottom:10px;}
+  header.brand .eyebrow{font-size:11px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--accent);}
+  header.brand .title{font-size:21px; font-weight:800; color:var(--ink); line-height:1.25; margin-top:4px;}
+  header.brand .sub{font-size:12px; color:var(--ink-soft); margin-top:6px; padding-bottom:16px; border-bottom:1px solid rgba(35,41,59,0.08);}
+
+  p, li{font-size:13.5px; line-height:1.65; font-weight:500;}
+  .intro-line{font-size:13.5px; line-height:1.65; color:var(--ink-soft); margin:14px 0; font-weight:500;}
+
+  .step{margin:16px 0; padding:16px 17px; background:var(--card); border:1px solid rgba(35,41,59,0.08); border-radius:12px; box-shadow:0 2px 8px rgba(35,41,59,0.04);}
+  .step-head{display:flex; align-items:center; gap:9px; margin-bottom:9px; font-weight:800; font-size:13.5px;}
+  .step-num{flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:11.5px;}
+
+  .cuaderno-box{background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:6px; padding:12px 14px; margin:10px 0;}
+  .cuaderno-box .cuaderno-label{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); margin-bottom:5px;}
+  .cuaderno-box p, .cuaderno-box li{font-size:13.5px; line-height:1.6; margin:3px 0;}
+
+  .config-bar{background:rgba(35,41,59,0.035); border:1px solid rgba(35,41,59,0.08); border-radius:10px; padding:12px 14px; margin:14px 0;}
+  .config-bar .config-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:7px;}
+
+  .link-card{background:#fff; border:1px solid rgba(35,41,59,0.08); border-left:3px solid var(--accent); border-radius:8px; padding:10px 13px; margin:8px 0;}
+  .link-card .link-bank{font-weight:800; font-size:12.5px;}
+  .link-card .link-type{font-size:11px; color:var(--ink-soft); margin:1px 0 5px; font-weight:500;}
+  .link-card a{color:var(--accent); font-size:11.5px; font-weight:600; word-break:break-all; text-decoration:none;}
+  .link-card a:hover{text-decoration:underline;}
+  .link-card .link-note{font-size:11px; color:var(--warn); margin-top:6px; font-weight:600;}
+
+  .table-wrap{overflow-x:auto;}
+  .template-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;}
+  .template-table th, .template-table td{border-bottom:1px solid rgba(35,41,59,0.10); padding:8px 6px; text-align:center; min-width:52px;}
+  .template-table th{font-weight:800; font-size:9.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft);}
+
+  .warn-strip{background:var(--warn-soft); color:var(--warn); font-weight:700; font-size:12px; text-align:center; padding:10px 12px; border-radius:8px; margin:12px 0; border:1px solid rgba(192,57,43,0.22);}
+
+  label.field{display:flex; flex-direction:column; gap:5px; font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:9px;}
+  input, select{font-family:var(--font); font-size:14px; font-weight:600; padding:9px 10px; border:1px solid rgba(35,41,59,0.14); border-radius:8px; background:#fff; color:var(--ink); width:100%;}
+  input:focus{outline:2px solid var(--accent); border-color:var(--accent);}
+
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 10px;}
+  @media (max-width:420px){ .calc-grid{grid-template-columns:1fr;} }
+  .calc-result{background:var(--accent-soft); border-radius:10px; padding:14px 15px; margin-top:10px;}
+  .calc-result .res-row{display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:600; padding:6px 0; border-bottom:1px solid rgba(35,41,59,0.08);}
+  .calc-result .res-row:last-child{border-bottom:none; font-weight:800; font-size:15px; color:var(--accent);}
+  .calc-warning{color:var(--warn); font-size:12.5px; font-weight:700; margin-top:9px; display:none;}
+
+  .foot{font-size:10.5px; font-weight:700; letter-spacing:.08em; color:var(--ink-soft); margin-top:20px; padding-top:14px; border-top:1px solid rgba(35,41,59,0.08);}
+
+  @media (max-width:400px){ .shell{padding:26px 18px 20px;} }
+</style>
+</head>
+<body>
+<div id="gateOverlay" style="position:fixed; inset:0; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;"><div style="background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.15); padding:32px 28px; max-width:320px; width:100%; text-align:center; font-family:var(--font);"><div style="font-size:32px; margin-bottom:10px;">🔒</div><div style="font-weight:800; font-size:15px; margin-bottom:6px; color:var(--ink);">Acceso solo en clase</div><div style="font-size:12px; color:var(--ink-soft); margin-bottom:16px;">Pídele la clave a tu profesor.</div><input type="password" id="gatePassInput" placeholder="Clave" style="text-align:center; margin-bottom:10px;"><button id="gateSubmitBtn" style="width:100%; padding:10px; border:none; border-radius:8px; background:var(--accent); color:#fff; font-weight:800; font-size:13px; cursor:pointer; font-family:var(--font);">Entrar</button><div id="gateError" style="color:var(--warn); font-size:11px; margin-top:8px; display:none;">Clave incorrecta, intenta de nuevo.</div></div></div>
+<script>
+var SESSION_PASSWORD = "tarjeta1"; // <-- cambia esta clave cuando quieras
+(function(){
+  function tryUnlock(){
+    var val = document.getElementById("gatePassInput").value.trim().toLowerCase();
+    if (val === SESSION_PASSWORD.toLowerCase()){
+      document.getElementById("gateOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      document.getElementById("gateError").style.display = "block";
+      document.getElementById("gatePassInput").value = "";
+      document.getElementById("gatePassInput").focus();
+    }
+  }
+  document.getElementById("gateSubmitBtn").addEventListener("click", tryUnlock);
+  document.getElementById("gatePassInput").addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+  document.getElementById("gatePassInput").focus();
+})();
+</script>
+<div class="shell" id="mainContent" style="display:none;">
+<header class="brand">
+<svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke="#4A5FBF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="20" width="48" height="32" rx="6"/><path d="M8 28h48"/><circle cx="45" cy="36" r="3" fill="#4A5FBF" stroke="none"/></svg>
+<div class="eyebrow">Sesión 1 de 7</div>
+<div class="title">El cupo del curso</div>
+<div class="sub">Colegio de Santander · Grado 8-2</div>
+</header>
+<div class="step"><div class="step-head"><span class="step-num">1</span>Antes de investigar nada</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno (o en un papel suelto, sin tu nombre)</div><p>Escribe cuánta plata manejas en una semana normal (mesada + lo que te ganes). No lo compartas todavía (tu profesor va a recogerlo).</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">2</span>Puesta en común visual</div><p>A medida que tu profesor lea los números del curso (sin nombres), agréguenlos aquí para verlos todos juntos:</p><div class="config-bar"><div class="config-label">Agregar un valor del curso</div><div style="display:flex; gap:8px; align-items:flex-end;"><label class="field" style="flex:1; margin-bottom:0;">Monto<input type="number" id="valorInput1" min="0" placeholder="ej. 40000"></label><button id="btnAgregar1" style="flex-shrink:0; padding:9px 14px; border-radius:8px; border:none; background:var(--accent); color:#fff; font-weight:800; font-size:12.5px; cursor:pointer;">Agregar</button></div></div><p style="font-size:10.5px; color:var(--ink-soft); font-weight:700; margin:10px 0 2px;">CADA PUNTO = UN VALOR DEL CURSO (tócalo para ver cuánto vale)</p><div id="dotplot1"></div><p id="emptyMsg1" style="font-size:11.5px; color:var(--ink-soft); text-align:center; margin-top:6px;">Aún no hay valores agregados.</p><div id="chips1" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;"></div><p id="countMsg1" style="font-size:11px; color:var(--ink-soft); margin-top:8px; font-weight:700;"></p><button id="btnBorrar1" style="margin-top:2px; padding:7px 12px; border-radius:8px; border:1px solid rgba(35,41,59,0.15); background:#fff; color:var(--ink-soft); font-weight:700; font-size:11px; cursor:pointer;">Borrar todo</button></div>
+<div class="step"><div class="step-head"><span class="step-num">3</span>La pregunta</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>Mirando los puntos de arriba: si tuvieras que resumir en <strong>UN SOLO número</strong> cuánta plata maneja “un estudiante típico” de este curso, ¿cuál usarías? Escribe el número <strong>y</strong> explica cómo lo calculaste (invéntate tu propio método).</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">4</span>Investiga</div><p>Ese número que acabas de inventar se parece a algo que los bancos calculan de sus clientes antes de ofrecerles una tarjeta de crédito. Busca en estas páginas reales:</p><div class="link-card"><div class="link-bank">Bancolombia</div><div class="link-type">Educación financiera</div><a href="https://blog.bancolombia.com/educacion-financiera/que-es-una-tarjeta-credito/" target="_blank" rel="noopener">blog.bancolombia.com/educacion-financiera/que-es-una-tarjeta-credito/</a></div><div class="link-card"><div class="link-bank">Bancolombia</div><div class="link-type">Educación financiera</div><a href="https://blog.bancolombia.com/educacion-financiera/como-funciona-tarjeta-de-credito/" target="_blank" rel="noopener">blog.bancolombia.com/educacion-financiera/como-funciona-tarjeta-de-credito/</a></div><div class="link-card"><div class="link-bank">Bancolombia</div><div class="link-type">Características de la tarjeta de crédito</div><a href="https://www.bancolombia.com/personas/productos/tarjetas-credito/caracteristicas" target="_blank" rel="noopener">www.bancolombia.com/personas/productos/tarjetas-credito/caracteristicas</a></div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno, responde investigando en esas páginas</div><p>a) ¿Qué es exactamente el <strong>cupo</strong> de una tarjeta de crédito?</p><p>b) ¿En qué se diferencia de la plata que ya es tuya en una cuenta de ahorros o tarjeta débito?</p><p>c) ¿Qué es la <strong>cuota de manejo</strong>? ¿Y el <strong>pago mínimo</strong>?</p><p>d) Tú usaste un solo número (tu propio método) para decidir el “cupo” del curso. Un banco real, ¿usa un método igual de simple para decidir TU cupo, o tiene en cuenta más cosas? ¿Cuáles?</p><p>Escribe cada respuesta con tus propias palabras (no copies el texto de la página).</p></div></div>
+<div class="foot">SESIÓN 1 DE 7</div>
+</div>
+<script>
+var valores1 = [];
+var selected1 = {};
+function fmt1(n){ return '$' + Math.round(n).toLocaleString('es-CO'); }
+function renderAll1(){
+  selected1 = {};
+  renderDotplot1();
+  renderChips1();
+  document.getElementById('countMsg1').textContent = valores1.length ? ('n = ' + valores1.length + ' valor' + (valores1.length===1?'':'es') + ' agregado' + (valores1.length===1?'':'s')) : '';
+}
+function toggleLabel1(idx){
+  selected1[idx] = !selected1[idx];
+  renderDotplot1();
+}
+function renderDotplot1(){
+  var container = document.getElementById('dotplot1');
+  var empty = document.getElementById('emptyMsg1');
+  if (valores1.length === 0){ container.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  var W = 320, H = 92, m = 16, axisY = H - 22;
+  var maxV = Math.max.apply(null, valores1) * 1.15;
+  function xPos(v){ return m + (v/maxV) * (W - 2*m); }
+  var rowsLastX = [];
+  var dots = '', labels = '';
+  valores1.forEach(function(v, idx){
+    var x = xPos(v);
+    var row = -1;
+    for (var r = 0; r < rowsLastX.length; r++){ if ((x - rowsLastX[r]) >= 11){ row = r; break; } }
+    if (row === -1){ row = rowsLastX.length; rowsLastX.push(x); } else { rowsLastX[row] = x; }
+    var y = axisY - 8 - Math.min(row,3)*11;
+    var isSel = !!selected1[idx];
+    var rad = isSel ? 9 : 7;
+    var fill = isSel ? '#C0392B' : '#4A5FBF';
+    dots += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + rad + '" fill="' + fill + '" class="dotpoint" data-idx="' + idx + '" style="cursor:pointer;"/>';
+    if (isSel){
+      labels += '<text x="' + x.toFixed(1) + '" y="' + (y-13).toFixed(1) + '" font-size="9.5" font-weight="800" fill="#C0392B" text-anchor="middle">' + fmt1(v) + '</text>';
+    }
+  });
+  var ticks = [0, maxV/2, maxV];
+  var tickSvg = ticks.map(function(t, idx){
+    var x = xPos(t);
+    var anchor = idx===0 ? 'start' : (idx===2 ? 'end' : 'middle');
+    return '<line x1="' + x.toFixed(1) + '" y1="' + axisY + '" x2="' + x.toFixed(1) + '" y2="' + (axisY+4) + '" stroke="rgba(35,41,59,0.3)" stroke-width="1"/>' +
+      '<text x="' + x.toFixed(1) + '" y="' + (axisY+15) + '" font-size="8.5" fill="#6B7280" text-anchor="' + anchor + '">' + fmt1(t) + '</text>';
+  }).join('');
+  var axis = '<line x1="' + m + '" y1="' + axisY + '" x2="' + (W-m) + '" y2="' + axisY + '" stroke="rgba(35,41,59,0.25)" stroke-width="1"/>';
+  container.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;touch-action:manipulation;">' + axis + tickSvg + dots + labels + '</svg>';
+}
+function renderChips1(){
+  var container = document.getElementById('chips1');
+  container.innerHTML = valores1.map(function(v, idx){
+    return '<span style="display:inline-flex; align-items:center; gap:4px; background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:11px; padding:4px 9px; border-radius:12px;">' + fmt1(v) + ' <button data-idx="' + idx + '" class="chipDel1" style="border:none; background:none; color:var(--accent); cursor:pointer; font-weight:800; font-size:12px; padding:0; line-height:1;">×</button></span>';
+  }).join('');
+}
+document.getElementById('btnAgregar1').addEventListener('click', function(){
+  var input = document.getElementById('valorInput1');
+  var v = parseFloat(input.value);
+  if (isNaN(v) || v <= 0) return;
+  valores1.push(v);
+  input.value = '';
+  renderAll1();
+});
+document.getElementById('valorInput1').addEventListener('keydown', function(e){
+  if (e.key === 'Enter'){ e.preventDefault(); document.getElementById('btnAgregar1').click(); }
+});
+document.getElementById('chips1').addEventListener('click', function(ev){
+  var btn = ev.target.closest('.chipDel1');
+  if (!btn) return;
+  valores1.splice(parseInt(btn.dataset.idx, 10), 1);
+  renderAll1();
+});
+document.getElementById('btnBorrar1').addEventListener('click', function(){
+  valores1 = [];
+  renderAll1();
+});
+document.getElementById('dotplot1').addEventListener('click', function(e){
+  var target = e.target.closest('.dotpoint');
+  if (!target) return;
+  toggleLabel1(parseInt(target.getAttribute('data-idx'), 10));
+});
+renderAll1();
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 2 · ¿Cuesta lo mismo pagar rápido que despacio?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F0EA; --card:#FFFFFF; --ink:#23293B; --ink-soft:#6B7280;
+    --accent:#4A5FBF; --accent-soft:rgba(74,95,191,0.08); --accent-line:rgba(74,95,191,0.28);
+    --warn:#C0392B; --warn-soft:rgba(192,57,43,0.08);
+    --font:'Manrope', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{min-height:100vh; display:flex; justify-content:center; padding:36px 16px 48px; background:var(--bg); font-family:var(--font); color:var(--ink);}
+  .shell{width:100%; max-width:560px; background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.10); padding:34px 30px 26px;}
+
+  header.brand{margin-bottom:6px;}
+  header.brand .icon{width:52px; height:52px; margin-bottom:10px;}
+  header.brand .eyebrow{font-size:11px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--accent);}
+  header.brand .title{font-size:21px; font-weight:800; color:var(--ink); line-height:1.25; margin-top:4px;}
+  header.brand .sub{font-size:12px; color:var(--ink-soft); margin-top:6px; padding-bottom:16px; border-bottom:1px solid rgba(35,41,59,0.08);}
+
+  p, li{font-size:13.5px; line-height:1.65; font-weight:500;}
+  .intro-line{font-size:13.5px; line-height:1.65; color:var(--ink-soft); margin:14px 0; font-weight:500;}
+
+  .step{margin:16px 0; padding:16px 17px; background:var(--card); border:1px solid rgba(35,41,59,0.08); border-radius:12px; box-shadow:0 2px 8px rgba(35,41,59,0.04);}
+  .step-head{display:flex; align-items:center; gap:9px; margin-bottom:9px; font-weight:800; font-size:13.5px;}
+  .step-num{flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:11.5px;}
+
+  .cuaderno-box{background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:6px; padding:12px 14px; margin:10px 0;}
+  .cuaderno-box .cuaderno-label{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); margin-bottom:5px;}
+  .cuaderno-box p, .cuaderno-box li{font-size:13.5px; line-height:1.6; margin:3px 0;}
+
+  .config-bar{background:rgba(35,41,59,0.035); border:1px solid rgba(35,41,59,0.08); border-radius:10px; padding:12px 14px; margin:14px 0;}
+  .config-bar .config-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:7px;}
+
+  .link-card{background:#fff; border:1px solid rgba(35,41,59,0.08); border-left:3px solid var(--accent); border-radius:8px; padding:10px 13px; margin:8px 0;}
+  .link-card .link-bank{font-weight:800; font-size:12.5px;}
+  .link-card .link-type{font-size:11px; color:var(--ink-soft); margin:1px 0 5px; font-weight:500;}
+  .link-card a{color:var(--accent); font-size:11.5px; font-weight:600; word-break:break-all; text-decoration:none;}
+  .link-card a:hover{text-decoration:underline;}
+  .link-card .link-note{font-size:11px; color:var(--warn); margin-top:6px; font-weight:600;}
+
+  .table-wrap{overflow-x:auto;}
+  .template-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;}
+  .template-table th, .template-table td{border-bottom:1px solid rgba(35,41,59,0.10); padding:8px 6px; text-align:center; min-width:52px;}
+  .template-table th{font-weight:800; font-size:9.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft);}
+
+  .warn-strip{background:var(--warn-soft); color:var(--warn); font-weight:700; font-size:12px; text-align:center; padding:10px 12px; border-radius:8px; margin:12px 0; border:1px solid rgba(192,57,43,0.22);}
+
+  label.field{display:flex; flex-direction:column; gap:5px; font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:9px;}
+  input, select{font-family:var(--font); font-size:14px; font-weight:600; padding:9px 10px; border:1px solid rgba(35,41,59,0.14); border-radius:8px; background:#fff; color:var(--ink); width:100%;}
+  input:focus{outline:2px solid var(--accent); border-color:var(--accent);}
+
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 10px;}
+  @media (max-width:420px){ .calc-grid{grid-template-columns:1fr;} }
+  .calc-result{background:var(--accent-soft); border-radius:10px; padding:14px 15px; margin-top:10px;}
+  .calc-result .res-row{display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:600; padding:6px 0; border-bottom:1px solid rgba(35,41,59,0.08);}
+  .calc-result .res-row:last-child{border-bottom:none; font-weight:800; font-size:15px; color:var(--accent);}
+  .calc-warning{color:var(--warn); font-size:12.5px; font-weight:700; margin-top:9px; display:none;}
+
+  .foot{font-size:10.5px; font-weight:700; letter-spacing:.08em; color:var(--ink-soft); margin-top:20px; padding-top:14px; border-top:1px solid rgba(35,41,59,0.08);}
+
+  @media (max-width:400px){ .shell{padding:26px 18px 20px;} }
+</style>
+</head>
+<body>
+<div id="gateOverlay" style="position:fixed; inset:0; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;"><div style="background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.15); padding:32px 28px; max-width:320px; width:100%; text-align:center; font-family:var(--font);"><div style="font-size:32px; margin-bottom:10px;">🔒</div><div style="font-weight:800; font-size:15px; margin-bottom:6px; color:var(--ink);">Acceso solo en clase</div><div style="font-size:12px; color:var(--ink-soft); margin-bottom:16px;">Pídele la clave a tu profesor.</div><input type="password" id="gatePassInput" placeholder="Clave" style="text-align:center; margin-bottom:10px;"><button id="gateSubmitBtn" style="width:100%; padding:10px; border:none; border-radius:8px; background:var(--accent); color:#fff; font-weight:800; font-size:13px; cursor:pointer; font-family:var(--font);">Entrar</button><div id="gateError" style="color:var(--warn); font-size:11px; margin-top:8px; display:none;">Clave incorrecta, intenta de nuevo.</div></div></div>
+<script>
+var SESSION_PASSWORD = "tarjeta2"; // <-- cambia esta clave cuando quieras
+(function(){
+  function tryUnlock(){
+    var val = document.getElementById("gatePassInput").value.trim().toLowerCase();
+    if (val === SESSION_PASSWORD.toLowerCase()){
+      document.getElementById("gateOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      document.getElementById("gateError").style.display = "block";
+      document.getElementById("gatePassInput").value = "";
+      document.getElementById("gatePassInput").focus();
+    }
+  }
+  document.getElementById("gateSubmitBtn").addEventListener("click", tryUnlock);
+  document.getElementById("gatePassInput").addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+  document.getElementById("gatePassInput").focus();
+})();
+</script>
+<div class="shell" id="mainContent" style="display:none;">
+<header class="brand">
+<svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke="#4A5FBF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="14" width="34" height="24" rx="4"/><line x1="6" y1="22" x2="40" y2="22"/><circle cx="46" cy="42" r="12"/><path d="M46 35v7l5 4"/></svg>
+<div class="eyebrow">Sesión 2 de 7</div>
+<div class="title">¿Cuesta lo mismo pagar rápido que despacio?</div>
+<div class="sub">Colegio de Santander · Grado 8-2</div>
+</header>
+<div class="config-bar"><div class="config-label">Configuración del profesor</div><label class="field">Monto de la compra hipotética<input type="number" id="monto2" value="300000" min="0"></label></div><div class="step"><div class="step-head"><span class="step-num">1</span>Antes de buscar nada</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>Si compras algo de <strong><span id="montoDisplay2a">$300.000</span></strong> y lo pagas TODO el mismo mes (a 1 cuota), ¿cuánto interés crees que pagarías? ¿Y si lo pagas en 36 cuotas? Sin calcular nada todavía: mientras más cuotas eliges, ¿la cuota mensual sube o baja? ¿Y el interés total? Escribe tu predicción.</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">2</span>Investiga con un simulador real (tu ancla real)</div><p>Elige un banco y simula la MISMA compra de <strong><span id="montoDisplay2b">$300.000</span></strong> tres veces: a 1 cuota, a 12 cuotas y a 36 cuotas. Anota la tasa E.A. (debería ser la misma en las tres) y la cuota mensual de cada una.</p><div class="link-card"><div class="link-bank">Bancolombia</div><div class="link-type">Calculadora interactiva: monto + plazo → cuota</div><a href="https://www.bancolombia.com/personas/tarjetas-de-credito/simulador-tarjeta-credito" target="_blank" rel="noopener">www.bancolombia.com/personas/tarjetas-de-credito/simulador-tarjeta-credito</a></div><div class="link-card"><div class="link-bank">RappiCard</div><div class="link-type">Calculadora interactiva: monto + plazo → cuota</div><a href="https://www.rappicard.co/simulador-tarjeta-de-credito-rappicard/" target="_blank" rel="noopener">www.rappicard.co/simulador-tarjeta-de-credito-rappicard/</a><div class="link-note">Si les pide iniciar sesión antes de calcular, usen la otra fuente.</div></div><div class="cuaderno-box"><div class="cuaderno-label">✏️ Copia esta tabla y llénala</div><div class="table-wrap"><table class="template-table"><tr><th>Cuotas</th><th>Tasa E.A.</th><th>Cuota mensual</th><th>Total pagado</th></tr><tr><td>1</td><td></td><td></td><td></td></tr><tr><td>12</td><td></td><td></td><td></td></tr><tr><td>36</td><td></td><td></td><td></td></tr></table></div></div></div>
+<div class="step"><div class="step-head"><span class="step-num">3</span>Explora TODOS los plazos a la vez</div><p>Con la tasa E.A. que encontraste, mueve el control de abajo y mira qué pasa en cualquier plazo entre 1 y 36 cuotas.</p><label class="field">Tasa E.A. que encontraste (%)<input type="number" id="taea2" value="25" step="0.1" min="0"></label><label class="field">Número de cuotas: <span id="cuotasSliderVal2">12</span><input type="range" id="cuotasSlider2" min="1" max="36" value="12"></label><div class="calc-result"><div class="res-row"><span>Cuota mensual</span><span id="resCuota2">$0</span></div><div class="res-row"><span>Interés total</span><span id="resInteres2">$0</span></div><div class="res-row"><span>Total pagado</span><span id="resTotal2">$0</span></div></div><p style="margin-top:12px; font-size:11px; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em;">Interés total según el plazo elegido (1 a 36 cuotas)</p><div id="chartA2"></div><p style="margin-top:12px; font-size:11px; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em;">En qué se va cada cuota, mes a mes</p><div id="chartB2"></div><p style="font-size:10.5px; color:var(--ink-soft); margin-top:4px;">🔴 interés &nbsp; 🟢 abono a capital</p><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>a) Mueve el control de cuotas de 1 a 36. ¿Qué le pasa a la cuota mensual? ¿Qué le pasa al interés total? Descríbelo con tus palabras.</p><p>b) Elige un plazo largo (24 o 36 cuotas) y mira el segundo gráfico. En los primeros meses, ¿qué parte es mayor: el interés o el abono a capital? ¿Y en los últimos meses? ¿Por qué crees que cambia así?</p><p>c) Los números que calculó este explorador para 1, 12 y 36 cuotas, ¿se parecen a los que anotaste del simulador real en el Paso 2? Si hay una pequeña diferencia, ¿por qué crees que pasa?</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">4</span>Contrasta</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>¿Qué tan cerca estaba tu predicción del Paso 1? ¿Te sorprendió algo del explorador?</p></div></div>
+<div class="foot">SESIÓN 2 DE 7</div>
+</div>
+<script>
+function fmt2(n){ return '$' + Math.round(n).toLocaleString('es-CO'); }
+function cuota2(monto, i, n){
+  if (Math.abs(i) < 1e-9) return monto / n;
+  return monto * i / (1 - Math.pow(1+i, -n));
+}
+function recompute2(){
+  var monto = parseFloat(document.getElementById('monto2').value) || 0;
+  var eaPct = parseFloat(document.getElementById('taea2').value) || 0;
+  var n = parseInt(document.getElementById('cuotasSlider2').value, 10) || 1;
+  var i = Math.pow(1 + eaPct/100, 1/12) - 1;
+
+  document.getElementById('cuotasSliderVal2').textContent = n;
+  var txt = '$' + Math.round(monto).toLocaleString('es-CO');
+  document.getElementById('montoDisplay2a').textContent = txt;
+  document.getElementById('montoDisplay2b').textContent = txt;
+
+  var c = cuota2(monto, i, n);
+  var totalPagado = c * n;
+  var interesTotal = totalPagado - monto;
+  document.getElementById('resCuota2').textContent = fmt2(c);
+  document.getElementById('resInteres2').textContent = fmt2(interesTotal);
+  document.getElementById('resTotal2').textContent = fmt2(totalPagado);
+
+  var pts = [];
+  var maxInt = 0;
+  for (var k = 1; k <= 36; k++){
+    var ck = cuota2(monto, i, k);
+    var intK = ck*k - monto;
+    pts.push(intK);
+    if (intK > maxInt) maxInt = intK;
+  }
+  if (maxInt <= 0) maxInt = 1;
+  var W = 320, H = 84, m = 6;
+  function xPos(k){ return m + (k-1)/35 * (W - 2*m); }
+  function yPos(v){ return H - m - (v/maxInt) * (H - 2*m); }
+  var poly = pts.map(function(v, idx){ return xPos(idx+1).toFixed(1) + ',' + yPos(v).toFixed(1); }).join(' ');
+  var markerX = xPos(n).toFixed(1);
+  var markerY = yPos(pts[n-1]).toFixed(1);
+  var svgA = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">' +
+    '<polyline points="' + poly + '" fill="none" stroke="#4A5FBF" stroke-width="2"/>' +
+    '<line x1="' + markerX + '" y1="0" x2="' + markerX + '" y2="' + H + '" stroke="#C0392B" stroke-width="1" stroke-dasharray="3,2"/>' +
+    '<circle cx="' + markerX + '" cy="' + markerY + '" r="4" fill="#C0392B"/>' +
+    '</svg>';
+  document.getElementById('chartA2').innerHTML = svgA;
+
+  var balance = monto;
+  var rows = [];
+  for (var mth = 1; mth <= n; mth++){
+    var interest = balance * i;
+    var principal = c - interest;
+    balance = balance - principal;
+    rows.push({interest: Math.max(0,interest), principal: Math.max(0,principal)});
+  }
+  var W2 = 320, H2 = 80;
+  var bw = W2 / rows.length;
+  var barsSvg = rows.map(function(r, idx){
+    var frac = r.interest / c;
+    if (frac < 0) frac = 0;
+    if (frac > 1) frac = 1;
+    var redH = frac * H2;
+    var greenH = H2 - redH;
+    var x = idx * bw;
+    var w = Math.max(bw - 0.6, 0.5);
+    return '<rect x="' + x.toFixed(1) + '" y="0" width="' + w.toFixed(1) + '" height="' + redH.toFixed(1) + '" fill="#C0392B"/>' +
+           '<rect x="' + x.toFixed(1) + '" y="' + redH.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + greenH.toFixed(1) + '" fill="#2F7D5C"/>';
+  }).join('');
+  var svgB = '<svg viewBox="0 0 ' + W2 + ' ' + H2 + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">' + barsSvg + '</svg>';
+  document.getElementById('chartB2').innerHTML = svgB;
+}
+['monto2','taea2','cuotasSlider2'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', recompute2);
+});
+recompute2();
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 5 · ¿Todos los bancos cobran la misma tasa?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F0EA; --card:#FFFFFF; --ink:#23293B; --ink-soft:#6B7280;
+    --accent:#4A5FBF; --accent-soft:rgba(74,95,191,0.08); --accent-line:rgba(74,95,191,0.28);
+    --warn:#C0392B; --warn-soft:rgba(192,57,43,0.08);
+    --font:'Manrope', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{min-height:100vh; display:flex; justify-content:center; padding:36px 16px 48px; background:var(--bg); font-family:var(--font); color:var(--ink);}
+  .shell{width:100%; max-width:560px; background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.10); padding:34px 30px 26px;}
+
+  header.brand{margin-bottom:6px;}
+  header.brand .icon{width:52px; height:52px; margin-bottom:10px;}
+  header.brand .eyebrow{font-size:11px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--accent);}
+  header.brand .title{font-size:21px; font-weight:800; color:var(--ink); line-height:1.25; margin-top:4px;}
+  header.brand .sub{font-size:12px; color:var(--ink-soft); margin-top:6px; padding-bottom:16px; border-bottom:1px solid rgba(35,41,59,0.08);}
+
+  p, li{font-size:13.5px; line-height:1.65; font-weight:500;}
+  .intro-line{font-size:13.5px; line-height:1.65; color:var(--ink-soft); margin:14px 0; font-weight:500;}
+
+  .step{margin:16px 0; padding:16px 17px; background:var(--card); border:1px solid rgba(35,41,59,0.08); border-radius:12px; box-shadow:0 2px 8px rgba(35,41,59,0.04);}
+  .step-head{display:flex; align-items:center; gap:9px; margin-bottom:9px; font-weight:800; font-size:13.5px;}
+  .step-num{flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:11.5px;}
+
+  .cuaderno-box{background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:6px; padding:12px 14px; margin:10px 0;}
+  .cuaderno-box .cuaderno-label{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--accent); margin-bottom:5px;}
+  .cuaderno-box p, .cuaderno-box li{font-size:13.5px; line-height:1.6; margin:3px 0;}
+
+  .config-bar{background:rgba(35,41,59,0.035); border:1px solid rgba(35,41,59,0.08); border-radius:10px; padding:12px 14px; margin:14px 0;}
+  .config-bar .config-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); margin-bottom:7px;}
+
+  .link-card{background:#fff; border:1px solid rgba(35,41,59,0.08); border-left:3px solid var(--accent); border-radius:8px; padding:10px 13px; margin:8px 0;}
+  .link-card .link-bank{font-weight:800; font-size:12.5px;}
+  .link-card .link-type{font-size:11px; color:var(--ink-soft); margin:1px 0 5px; font-weight:500;}
+  .link-card a{color:var(--accent); font-size:11.5px; font-weight:600; word-break:break-all; text-decoration:none;}
+  .link-card a:hover{text-decoration:underline;}
+  .link-card .link-note{font-size:11px; color:var(--warn); margin-top:6px; font-weight:600;}
+
+  .table-wrap{overflow-x:auto;}
+  .template-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:8px;}
+  .template-table th, .template-table td{border-bottom:1px solid rgba(35,41,59,0.10); padding:8px 6px; text-align:center; min-width:52px;}
+  .template-table th{font-weight:800; font-size:9.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft);}
+
+  .warn-strip{background:var(--warn-soft); color:var(--warn); font-weight:700; font-size:12px; text-align:center; padding:10px 12px; border-radius:8px; margin:12px 0; border:1px solid rgba(192,57,43,0.22);}
+
+  label.field{display:flex; flex-direction:column; gap:5px; font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:9px;}
+  input, select{font-family:var(--font); font-size:14px; font-weight:600; padding:9px 10px; border:1px solid rgba(35,41,59,0.14); border-radius:8px; background:#fff; color:var(--ink); width:100%;}
+  input:focus{outline:2px solid var(--accent); border-color:var(--accent);}
+
+  .calc-grid{display:grid; grid-template-columns:1fr 1fr; gap:0 10px;}
+  @media (max-width:420px){ .calc-grid{grid-template-columns:1fr;} }
+  .calc-result{background:var(--accent-soft); border-radius:10px; padding:14px 15px; margin-top:10px;}
+  .calc-result .res-row{display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:600; padding:6px 0; border-bottom:1px solid rgba(35,41,59,0.08);}
+  .calc-result .res-row:last-child{border-bottom:none; font-weight:800; font-size:15px; color:var(--accent);}
+  .calc-warning{color:var(--warn); font-size:12.5px; font-weight:700; margin-top:9px; display:none;}
+
+  .foot{font-size:10.5px; font-weight:700; letter-spacing:.08em; color:var(--ink-soft); margin-top:20px; padding-top:14px; border-top:1px solid rgba(35,41,59,0.08);}
+
+  @media (max-width:400px){ .shell{padding:26px 18px 20px;} }
+</style>
+</head>
+<body>
+<div id="gateOverlay" style="position:fixed; inset:0; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px;"><div style="background:var(--card); border-radius:16px; box-shadow:0 10px 30px rgba(35,41,59,0.15); padding:32px 28px; max-width:320px; width:100%; text-align:center; font-family:var(--font);"><div style="font-size:32px; margin-bottom:10px;">🔒</div><div style="font-weight:800; font-size:15px; margin-bottom:6px; color:var(--ink);">Acceso solo en clase</div><div style="font-size:12px; color:var(--ink-soft); margin-bottom:16px;">Pídele la clave a tu profesor.</div><input type="password" id="gatePassInput" placeholder="Clave" style="text-align:center; margin-bottom:10px;"><button id="gateSubmitBtn" style="width:100%; padding:10px; border:none; border-radius:8px; background:var(--accent); color:#fff; font-weight:800; font-size:13px; cursor:pointer; font-family:var(--font);">Entrar</button><div id="gateError" style="color:var(--warn); font-size:11px; margin-top:8px; display:none;">Clave incorrecta, intenta de nuevo.</div></div></div>
+<script>
+var SESSION_PASSWORD = "tarjeta5"; // <-- cambia esta clave cuando quieras
+(function(){
+  function tryUnlock(){
+    var val = document.getElementById("gatePassInput").value.trim().toLowerCase();
+    if (val === SESSION_PASSWORD.toLowerCase()){
+      document.getElementById("gateOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      document.getElementById("gateError").style.display = "block";
+      document.getElementById("gatePassInput").value = "";
+      document.getElementById("gatePassInput").focus();
+    }
+  }
+  document.getElementById("gateSubmitBtn").addEventListener("click", tryUnlock);
+  document.getElementById("gatePassInput").addEventListener("keydown", function(e){ if (e.key === "Enter"){ e.preventDefault(); tryUnlock(); } });
+  document.getElementById("gatePassInput").focus();
+})();
+</script>
+<div class="shell" id="mainContent" style="display:none;">
+<header class="brand">
+<svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke="#4A5FBF" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="16" width="34" height="24" rx="4"/><line x1="6" y1="24" x2="40" y2="24"/><circle cx="44" cy="40" r="9"/><line x1="51" y1="47" x2="58" y2="54"/></svg>
+<div class="eyebrow">Sesión 5 de 7</div>
+<div class="title">¿Todos los bancos cobran la misma tasa?</div>
+<div class="sub">Colegio de Santander · Grado 8-2</div>
+</header>
+<div class="config-bar"><div class="config-label">Configuración del profesor</div><label class="field">Monto de la compra hipotética<input type="number" id="monto5" value="500000" min="0"></label><label class="field">Número de cuotas<input type="number" id="cuotas5" value="6" min="1"></label></div><div class="step"><div class="step-head"><span class="step-num">1</span>Antes de buscar nada</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>¿Crees que todos los bancos cobran la misma tasa de interés por una tarjeta de crédito? Si no, ¿cuál crees que cobra más y cuál menos? Explica por qué piensas eso.</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">2</span>Fuentes reales (comparen al menos dos)</div><p>Simulen la MISMA compra de <strong><span id="montoDisplay5">$500.000</span></strong> a <strong><span id="cuotasDisplay5">6</span></strong> cuotas en varios bancos.</p><div class="warn-strip">⚠️ Solo usen la calculadora. NO llenen formularios de solicitud ni ingresen datos personales reales.</div><div class="link-card"><div class="link-bank">Bancolombia</div><div class="link-type">Calculadora interactiva</div><a href="https://www.bancolombia.com/personas/tarjetas-de-credito/simulador-tarjeta-credito" target="_blank" rel="noopener">www.bancolombia.com/personas/tarjetas-de-credito/simulador-tarjeta-credito</a></div><div class="link-card"><div class="link-bank">RappiCard</div><div class="link-type">Calculadora interactiva</div><a href="https://www.rappicard.co/simulador-tarjeta-de-credito-rappicard/" target="_blank" rel="noopener">www.rappicard.co/simulador-tarjeta-de-credito-rappicard/</a><div class="link-note">Si pide iniciar sesión, usen otra fuente.</div></div><div class="link-card"><div class="link-bank">BBVA</div><div class="link-type">Simulador de tarjeta de crédito</div><a href="https://www.bbva.com.co/personas/productos/tarjetas/credito/simulador.html" target="_blank" rel="noopener">www.bbva.com.co/personas/productos/tarjetas/credito/simulador.html</a><div class="link-note">Puede estar pensado para clientes registrados; si pide iniciar sesión, usen otra fuente.</div></div><div class="link-card"><div class="link-bank">Nu</div><div class="link-type">Artículo explicativo con ejemplos reales</div><a href="https://blog.nu.com.co/tasa-de-interes-de-nu-tu-controlas-cuanto-pagas/" target="_blank" rel="noopener">blog.nu.com.co/tasa-de-interes-de-nu-tu-controlas-cuanto-pagas/</a></div><div class="link-card"><div class="link-bank">Banco de Bogotá</div><div class="link-type">Página oficial de tasas de interés</div><a href="https://www.bancodebogota.com/personas/tarjetas-de-credito/tasas-de-interes" target="_blank" rel="noopener">www.bancodebogota.com/personas/tarjetas-de-credito/tasas-de-interes</a></div></div>
+<div class="step"><div class="step-head"><span class="step-num">3</span>En el cuaderno</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ Copia esta tabla y llénala</div><div class="table-wrap"><table class="template-table"><tr><th>Banco</th><th>Tasa E.A.</th><th>Cuota mensual</th><th>Total pagado</th><th>Pagado “de más”</th></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></table></div></div></div>
+<div class="step"><div class="step-head"><span class="step-num">4</span>Compáralos lado a lado</div><p>Escribe el nombre y la tasa E.A. de cada banco que investigaste (usa la MISMA compra y el mismo número de cuotas de arriba):</p><div class="calc-grid"><label class="field">Banco A<input type="text" id="bancoA5" placeholder="ej. Bancolombia"></label><label class="field">Tasa E.A. banco A (%)<input type="number" id="taeaA5" step="0.1" min="0" placeholder="ej. 25"></label><label class="field">Banco B<input type="text" id="bancoB5" placeholder="ej. RappiCard"></label><label class="field">Tasa E.A. banco B (%)<input type="number" id="taeaB5" step="0.1" min="0" placeholder="ej. 24"></label><label class="field">Banco C (opcional)<input type="text" id="bancoC5" placeholder="ej. Nu"></label><label class="field">Tasa E.A. banco C (%)<input type="number" id="taeaC5" step="0.1" min="0" placeholder="0"></label></div><div id="barChart5"></div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>Mirando la comparación: para la MISMA compra y el mismo número de cuotas, ¿cuánto de diferencia hay entre pagar en el banco más barato y el más caro? ¿Te pareció mucho o poco?</p></div></div>
+<div class="step"><div class="step-head"><span class="step-num">5</span>Contrasta</div><div class="cuaderno-box"><div class="cuaderno-label">✏️ En el cuaderno</div><p>¿Se cumplió tu predicción del Paso 1?</p></div></div>
+<div class="foot">SESIÓN 5 DE 7</div>
+</div>
+<script>
+function fmt5(n){ return '$' + Math.round(n).toLocaleString('es-CO'); }
+function cuota5(monto, i, n){
+  if (Math.abs(i) < 1e-9) return monto / n;
+  return monto * i / (1 - Math.pow(1+i, -n));
+}
+function updateM5(){
+  var v = parseFloat(document.getElementById('monto5').value) || 0;
+  var c = parseFloat(document.getElementById('cuotas5').value) || 0;
+  document.getElementById('montoDisplay5').textContent = '$' + Math.round(v).toLocaleString('es-CO');
+  document.getElementById('cuotasDisplay5').textContent = c;
+  renderBarChart5();
+}
+function renderBarChart5(){
+  var monto = parseFloat(document.getElementById('monto5').value) || 0;
+  var n = parseFloat(document.getElementById('cuotas5').value) || 1;
+  var slots = [
+    {name: document.getElementById('bancoA5').value, tasa: document.getElementById('taeaA5').value},
+    {name: document.getElementById('bancoB5').value, tasa: document.getElementById('taeaB5').value},
+    {name: document.getElementById('bancoC5').value, tasa: document.getElementById('taeaC5').value}
+  ];
+  var bars = slots.filter(function(s){ return s.name && s.tasa !== ''; }).map(function(s){
+    var i = Math.pow(1 + parseFloat(s.tasa)/100, 1/12) - 1;
+    var c = cuota5(monto, i, n);
+    return { name: s.name, total: c*n };
+  });
+  var container = document.getElementById('barChart5');
+  if (bars.length === 0){ container.innerHTML = ''; return; }
+  var maxTotal = Math.max.apply(null, bars.map(function(b){ return b.total; })) * 1.15;
+  var rowH = 30;
+  var W = 320;
+  var rows = bars.map(function(b, idx){
+    var w = (b.total / maxTotal) * (W - 90);
+    var y = idx * rowH;
+    return '<text x="0" y="' + (y+13) + '" font-size="10" font-weight="700" fill="#23293B">' + b.name + '</text>' +
+      '<rect x="70" y="' + y + '" width="' + w.toFixed(1) + '" height="18" rx="4" fill="#4A5FBF"/>' +
+      '<text x="' + (74+w) + '" y="' + (y+13) + '" font-size="9.5" fill="#6B7280">' + fmt5(b.total) + '</text>';
+  }).join('');
+  container.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + (bars.length*rowH) + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">' + rows + '</svg>';
+}
+['monto5','cuotas5','bancoA5','taeaA5','bancoB5','taeaB5','bancoC5','taeaC5'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', function(){ updateM5(); });
+});
+updateM5();
+</script>
+</body>
+</html>
